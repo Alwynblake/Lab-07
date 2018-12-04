@@ -1,4 +1,4 @@
-'use strict'
+'use strict';
 
 const express = require('express');
 const cors = require('cors');
@@ -11,12 +11,7 @@ const app = express();
 
 app.use(cors());
 
-function Location(data) {
-this.formatted_query = data.formated_address;
-this.latitude = data.geometry.location.lat;
-this.longitude = data.geometry.location.lng;
-};
-
+//location functions
 app.get('/location', (request, response) => {
   console.log('my request object:', request.body);
   const locData = searchToLatLong(request.query.data);
@@ -29,6 +24,12 @@ function searchToLatLong(query) {
   location.search_query = query;
   return location;
 }
+
+function Location(data) {
+this.formatted_query = data.formated_address;
+this.latitude = data.geometry.location.lat;
+this.longitude = data.geometry.location.lng;
+};
 
 //Weather functions
 app.get('/weather', (request, response) => {
