@@ -31,6 +31,28 @@ function searchToLatLong(query) {
 }
 
 
+
+
+app.get('/weather', (request, response) => {
+  console.log('my request object:', request.body);
+  const weaData = getWeatherData(request.query.data);
+  response.send(weaData);
+});
+
+function Weather(data) {
+  this.time = data.time;
+  this.forcast = data.summary;
+};
+
+function getWeatherData(query) {
+  const weatherData = require('./data/weather.json');
+  const weather = new Weather(weatherData.currenly);
+  weather.search_query = query;
+  return weather;
+
+
+
+
 app.listen(PORT, () => {
   console.log(`listening on ${PORT}`);
 });
