@@ -9,13 +9,7 @@ require('dotenv').config();
 const PORT = process.env.PORT || 3000;
 const app = express();
 
-app.use(express.static('./'));
-
 app.use(cors());
-
-app.get('./home', function(req,res){
-  res.sendFile('./index.html');
-});
 
 function Location(data) {
 this.formatted_query = data.formated_address;
