@@ -49,6 +49,7 @@ function getWeatherData(query) {
   const weather = new Weather(weatherData.currenly);
   weather.search_query = query;
   return weather;
+};
 
 
 
