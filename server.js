@@ -46,7 +46,7 @@ function Weather(data) {
 
 function getWeatherData(query) {
   const weatherData = require('./data/weather.json');
-  const weather = new Weather(weatherData.currenly);
+  const weather = new Weather(weatherData.daily);
   weather.search_query = query;
   return weather;
 };
