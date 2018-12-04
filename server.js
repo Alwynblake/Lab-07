@@ -30,9 +30,7 @@ function searchToLatLong(query) {
   return location;
 }
 
-
-
-
+//Weather functions
 app.get('/weather', (request, response) => {
   console.log('my request object:', request.body);
   const weaData = getWeatherData(request.query.data);
