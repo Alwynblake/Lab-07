@@ -25,9 +25,10 @@ function searchToLatLong(query) {
 }
 
 function Location(data) {
-this.formatted_query = data.formatted_address;
-this.latitude = data.geometry.location.lat;
-this.longitude = data.geometry.location.lng;
+  this.latitude = res.body.results[0].geometry.location.lat;
+  this.longitude = res.body.results[0].geometry.location.lng;
+  this.formatted_query = res.body.results[0].formatted_address;
+  this.search_query = query;
 };
 
 //Weather functions
