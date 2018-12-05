@@ -1,59 +1,64 @@
 'use strict';
 
 const express = require('express');
+const superagent = require('superagent');
+const app = express();
 const cors = require('cors');
-//const superagent = require('superagent');
+const PORT = process.env.PORT || 3000;
 
 require('dotenv').config();
-
-const PORT = process.env.PORT || 3000;
-const app = express();
 
 app.use(cors());
 
 //location functions
 app.get('/location', (request, response) => {
-  console.log('my request object:', request.body);
-  const locData = searchToLatLong(request.query.data);
-  response.send(locData);
+  searchToLatLong(request.query.data)
+    .then(location => response.send(location))
+    .catch(error => handleError(error, response));
 });
 
 function searchToLatLong(query) {
-  const geoData = require('./data/location.json');
-  const location = new Location(geoData.results[0]);
-  location.search_query = query;
-  return location;
+  const url = `https://maps.googleapis.com/maps/api/geocode/json?address=${query}&key=${process.env.GEOCODE_API_KEY}`;
+
+  return superagent.get(url)
+    .then(res => {
+		  return new Location(query, res);
+	  })
+	  .catch(error => handleError(error));
 }
 
-function Location(data) {
-this.formatted_query = data.formatted_address;
-this.latitude = data.geometry.location.lat;
-this.longitude = data.geometry.location.lng;
+function Location(query, res) {
+  this.latitude = res.body.results[0].geometry.location.lat;
+  this.longitude = res.body.results[0].geometry.location.lng;
+  this.formatted_query = res.body.results[0].formatted_address;
+  this.search_query = query;
 };
 
 //Weather functions
-app.get('/weather', (request, response) => {
-  console.log('my request object:', request.body);
-  const weaData = getWeatherData(request.query.data);
-  response.send(weaData);
-});
+app.get('/weather', getWeather);
 
-function Weather(data) {
-  this.time = data.time;
-  this.forcast = data.summary;
+function Weather(day) {
+  this.forecast = day.summary;
+  this.time = new Date(day.time * 1000).toDateString();
 };
 
-function getWeatherData(query) {
-  const weatherData = require('./data/weather.json');
-  const weather = new Weather(weatherData.daily);
-  weather.search_query = query;
-  return weather;
+function getWeather(request, response) {
+  const url = `https://api.darksky.net/forecast/${process.env.WEATHER_API_KEY}/${request.query.data.latitude},${request.query.data.longitude}`;
+
+  superagent.get(url)
+    .then(result => {
+      const weatherSummaries = result.body.daily.data.map(day => {
+        return new Weather(day);
+      });
+      response.send(weatherSummaries);
+    })
+    .catch(error => handleError(error));
 };
 
 
 function handleError(err, res) {
-  console.log(error);
-  if (res) res.status(500).send('something broke');
+  console.error(err);
+  if (res) res.status(500).send('Sorry - Something Broke');
 }
 
 app.listen(PORT, () => {
