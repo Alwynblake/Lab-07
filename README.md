@@ -18,6 +18,7 @@ Our application will take in a location, and use that location to produce a map,
 
 ## Change Log
 12-05-2018 9:59 - Application now has fully functional server with Weather and Location information built in. 
+12-05-2018 12:58 - Application now has fully functional yelp and tmdb information built in.
 <!-- Use this area to document the iterative changes made to your application as each feature is successfully implemented. Use time stamps. Here's an examples:
 
 01-01-2001 4:59pm - Application now has a fully-functional express server, with a GET route for the location resource.
@@ -30,9 +31,10 @@ APIs:
 - TheMovieDB
 - Yelp Fusion
 
+
 ## Time Estimates
 
-Number and name of feature: Constently format data
+Number and name of feature: #1 Constently format data
 
 Estimate of time needed to complete: 30 min
 
@@ -41,5 +43,27 @@ Start time: 9:20
 Finish time: 9:50
 
 Actual time needed to complete: 30 min
+
+-
+Number and name of feature: #2 Yelp
+
+Estimate of time needed to complete: 1 hr
+
+Start time: 9:55
+
+Finish time: 1:30
+
+Actual time needed to complete: 1 1/2 hours
+
+-
+Number and name of feature: # Movies
+
+Estimate of time needed to complete: 1 hour
+
+Start time: 1:30
+
+Finish time: 1:00
+
+Actual time needed to complete: 1 hour 30 min
 
 -

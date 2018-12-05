@@ -79,6 +79,30 @@ function getYelp(request, response) {
 }
 
 
+//Movie Functions
+app.get('/movies', getMovies);
+function Movies(data){
+  this.title = data.title;
+  this.overview = data.overview;
+  this.average_votes = data.vote_average;
+  this.total_votes = data.vote_count;
+  this.image_url = 'https://image.tmdb.org/t/p/w370_and_h556_bestv2/' + data.poster_path;
+  this.popularity = data.popularity;
+  this.released_on = data.release_date;
+}
+
+function getMovies(request, response) {
+  const url = `https://api.themoviedb.org/3/search/movie?api_key=${process.env.TMDB_API_KEY}&query=${request.query.data.search_query}`
+  superagent.get(url)
+    .then(ourResult => {
+      const movieSummaries = ourResult.body.results.map(data => {
+        return new Movies(data);
+      });
+      response.send(movieSummaries);
+    })
+    .catch(error => handleError(error));
+}
+
 function handleError(err, res) {
   console.error(err);
   if (res) res.status(500).send('Sorry - Something Broke');
