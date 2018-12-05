@@ -1,13 +1,12 @@
 'use strict';
 
 const express = require('express');
+const superagent = require('superagent');
+const app = express();
 const cors = require('cors');
-//const superagent = require('superagent');
+const PORT = process.env.PORT || 3000;
 
 require('dotenv').config();
-
-const PORT = process.env.PORT || 3000;
-const app = express();
 
 app.use(cors());
 
