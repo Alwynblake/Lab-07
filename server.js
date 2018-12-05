@@ -26,7 +26,7 @@ function searchToLatLong(query) {
 }
 
 function Location(data) {
-this.formatted_query = data.formated_address;
+this.formatted_query = data.formatted_address;
 this.latitude = data.geometry.location.lat;
 this.longitude = data.geometry.location.lng;
 };
@@ -51,7 +51,10 @@ function getWeatherData(query) {
 };
 
 
-
+function handleError(err, res) {
+  console.log(error);
+  if (res) res.status(500).send('something broke');
+}
 
 app.listen(PORT, () => {
   console.log(`listening on ${PORT}`);
