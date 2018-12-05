@@ -19,6 +19,7 @@ app.get('/location', (request, response) => {
 
 function searchToLatLong(query) {
   const url = `https://maps.googleapis.com/maps/api/geocode/json?address=${query}&key=${process.env.GEOCODE_API_KEY}`;
+
   return superagent.get(url)
     .then(res => {
 		  return new Location(query, res);
@@ -26,7 +27,7 @@ function searchToLatLong(query) {
 	  .catch(error => handleError(error));
 }
 
-function Location(data) {
+function Location(query, res) {
   this.latitude = res.body.results[0].geometry.location.lat;
   this.longitude = res.body.results[0].geometry.location.lng;
   this.formatted_query = res.body.results[0].formatted_address;
@@ -37,7 +38,7 @@ function Location(data) {
 app.get('/weather', getWeather);
 
 function Weather(day) {
-  this.forcast = day.summary;
+  this.forecast = day.summary;
   this.time = new Date(day.time * 1000).toDateString();
 };
 
