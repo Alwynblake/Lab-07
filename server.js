@@ -12,7 +12,6 @@ app.use(cors());
 
 //location functions
 app.get('/location', (request, response) => {
-  console.log('my request object:', request.body);
   const locData = searchToLatLong(request.query.data);
   response.send(locData);
 });
@@ -51,8 +50,8 @@ function getWeatherData(query) {
 
 
 function handleError(err, res) {
-  console.log(error);
-  if (res) res.status(500).send('something broke');
+  console.error(err);
+  if (res) res.status(500).send('Sorry - Something Broke');
 }
 
 app.listen(PORT, () => {
