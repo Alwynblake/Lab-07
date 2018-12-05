@@ -18,10 +18,12 @@ app.get('/location', (request, response) => {
 });
 
 function searchToLatLong(query) {
-  const geoData = require('./data/location.json');
-  const location = new Location(geoData.results[0]);
-  location.search_query = query;
-  return location;
+  const url = `https://maps.googleapis.com/maps/api/geocode/json?address=${query}&key=${process.env.GEOCODE_API_KEY}`;
+  return superagent.get(url)
+    .then(res => {
+		  return new Location(query, res);
+	  })
+	  .catch(error => handleError(error));
 }
 
 function Location(data) {
@@ -32,22 +34,24 @@ function Location(data) {
 };
 
 //Weather functions
-app.get('/weather', (request, response) => {
-  console.log('my request object:', request.body);
-  const weaData = getWeatherData(request.query.data);
-  response.send(weaData);
-});
+app.get('/weather', getWeather);
 
-function Weather(data) {
-  this.time = data.time;
-  this.forcast = data.summary;
+function Weather(day) {
+  this.forcast = day.summary;
+  this.time = new Date(day.time * 1000).toDateString();
 };
 
-function getWeatherData(query) {
-  const weatherData = require('./data/weather.json');
-  const weather = new Weather(weatherData.daily);
-  weather.search_query = query;
-  return weather;
+function getWeather(request, response) {
+  const url = `https://api.darksky.net/forecast/${process.env.WEATHER_API_KEY}/${request.query.data.latitude},${request.query.data.longitude}`;
+
+  superagent.get(url)
+    .then(result => {
+      const weatherSummaries = result.body.daily.data.map(day => {
+        return new Weather(day);
+      });
+      response.send(weatherSummaries);
+    })
+    .catch(error => handleError(error));
 };
 
 
