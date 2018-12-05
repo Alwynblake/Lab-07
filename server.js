@@ -12,8 +12,9 @@ app.use(cors());
 
 //location functions
 app.get('/location', (request, response) => {
-  const locData = searchToLatLong(request.query.data);
-  response.send(locData);
+  searchToLatLong(request.query.data)
+    .then(location => response.send(location))
+    .catch(error => handleError(error, response));
 });
 
 function searchToLatLong(query) {
